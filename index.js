@@ -117,6 +117,14 @@ app.post('/items', async (req, res) => {
   res.send(newItem);
 });
 
+const simulatePromise = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve();
+    }, 5000);
+  });
+};
+
 app.put('/items/:id', async (req, res) => {
   const qty = Number(req.body.qty);
   const session = await db.startSession();
@@ -132,6 +140,7 @@ app.put('/items/:id', async (req, res) => {
     item.qty = item.qty - qty;
 
     await item.save();
+    await simulatePromise();
     await session.commitTransaction();
 
     await session.endSession();
